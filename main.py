@@ -1,5 +1,6 @@
-# Main Objective : Adding Backspace, Buttons for Voice, Scientific Calc, Percentage, decimal, brackets etc
-
+# Main Objective : to solve atleast basic arithmetic problems via voice recognition 
+# 				 : making buttons show up / disappear when Scie Button is pressed 
+# 				 : using eval() to solve any equations 
 import tkinter as tk 
 from tkinter import *
 from tkinter import messagebox
@@ -11,28 +12,32 @@ import re
 
 
 val=""   
-A = 0
-operator = ""
+operators = ["+", "-", "*", "/", "%", "("]
 
 def voice_actions(arr):
-	global A
+	global val
+	A = 0
 	operator = arr[0]
 	op1 = arr[1]
 	op2 = arr[2]
+
 	if operator == "+":
 		A = int(op1) + int(op2)
 	
 	if operator == "-":
 		A = int(op1) - int(op2)
 
-	if operator == "*" or operator == "into" or operator == "x" or operator == "multiply by" or operator == "multiply":
+	if operator in  ["*", "into", "x", "multiply by", "multiply", "times", "x", "time"]:
 		A = int(op1) * int(op2)
 
 	if operator == "/" or operator == "divided by" or operator == "divided" or operator == "divide":
 		A = int(op1) / int(op2)
+	if operator == "factorial":
+		A = math.factorial(op2)
 	
-	A = str(A)
-	data.set(A)
+	val = str(A)
+	data.set(val)
+
 
 def pressed_btn1():
 	global val
@@ -84,218 +89,170 @@ def pressed_btn0():
 	val=val+"0"
 	data.set(val)
 
+
+
 def pressed_Plus():
-	global A
-	global operator
 	global val
-	try:
-		A=int(val)
-	except:
-		A=float(val)
-	operator="+"
+	
 	val=val + "+"
 	data.set(val)
 
 def pressed_Minus():
-	global A
-	global operator
 	global val
-	try:
-		A = int(val)
-	except:
-		A = float(val)
-	operator="-"
+	
 	val=val + "-"
 	data.set(val)
 
 def pressed_Div():
-	global A
-	global operator
 	global val
-	try:
-		A = int(val)
-	except:
-		A = float(val)	
-	operator="/"
+	
 	val=val + "/"
 	data.set(val)
 
 def pressed_C():
-	global A
 	global val
-	global operator
-
-	A=0
 	val=""
-	operator=""
 	data.set(val)
 
 def pressed_Mul():
-	global A
-	global operator
 	global val
-	try:
-		A=int(val)
-	except:
-		A=float(val)
-	operator="*"
+	
 	val=val + "*"
 	data.set(val)
 
 
 def pressed_btnV():
+	global val
 	data.set("Speak Now...")
 	text = v_input()
 	print(text)
-	data.set(text)
+	val = text
+	data.set(val)
 	arr = analyze(text) #array of operands and operator
 	print(arr)
 	voice_actions(arr)
+	
 
 def pressed_dot():
-	global A
-	global operator
 	global val
 	val = val + "."
 	data.set(val)
 
+def pressed_percent():
+	global val
+
+	val = val + "%"
+	data.set(val)
+
 def pressed_btnB():
-	global A
-	global operator
 	global val
-	val = val[:-1]
-	data.set(val)
- 	
-def pressed_bracket():
-
-	global A
-	global operator
-	global val
-	last = 0
-	for i in val:
-		if i == "(":
-			last = "("
-		if i == ")":
-			last = ")"
-	if last == 0 or last == ")":
-		val += "("
+	l = len(val)
+	if val[l-5:] in [" cos(", " sin(", " log(", " tan("]:
+		val = val[:l-5]
 	else:
-		val += ")"
+		val = val[:-1]
 	data.set(val)
+
+def pressed_LB():
+	global val
+	
+	val += "("
+	data.set(val)
+
+def pressed_RB():
+	global val
+	
+	val += ")"
+	data.set(val)
+
 def result():
-	global A
-	global operator
 	global val
-	val2 = val
+
+	while "π" in val:
+		val = val.replace("π", "math.pi")
+	while " sin" in val:
+		val = val.replace(" sin", "math.sin")	
+	while " cos" in val:
+		val = val.replace(" cos", "math.cos")		
+	while " tan" in val:
+		val = val.replace(" tan", "math.tan")
+	while " log" in val:
+		val = val.replace(" log", "math.log")
+	while "%" in val:
+		val = val.replace("%", "* 0.01")
+	while "!" in val:
+		pat = re.compile(r"\d+(?<=)!")
+		n = re.search(pat, val)
+		str1 = val[n.start():n.end()]
+		num = val[n.start():n.end()-1]
+		rep = "math.factorial(" + num + ")"
+		val = val.replace(str1, rep)
+
 	
-	if operator == "+" :
-		try:
-			x = int((val2.split("+")[1]))
-		except:
-			x = float((val2.split("+")[1]))
-		C=A+x
-		data.set(C)
-		val = str(C)
+	val = str(eval(val))
+	data.set(val)
 
-	elif operator == "-" :
-		try:
-			x = int((val2.split("-")[1]))
-		except:
-			x = float((val2.split("-")[1]))	
-		C=A-x
-		data.set(C)
-		val = str(C)
 
-	elif operator == "*" :
-		try:
-			x = int((val2.split("*")[1]))
-		except:
-			x = float((val2.split("*")[1]))
-		C=A*x
-		data.set(C)
-		val = str(C)
-
-	if operator == "/" :
-		try:
-			x = int((val2.split("/")[1]))
-		except:
-			x = float((val2.split("/")[1]))
-		
-		if x == 0 :
-			messagebox.showerror("Error","Division with 0 is NOT supported")
-			A=0
-			val=""
-			data.set(val)
-		else:	 
-			C=A/x
-			data.set(C)
-			val = str(C)
-	if operator == "sin":
-		pat = re.compile(r"(?<=sin\()\d+")
-		n = re.search(pat, val)
-		num = float(val[n.start():n.end()])
-		val = str(math.sin(num))
-		data.set(val)
-	if operator == "cos":
-		pat = re.compile(r"(?<=cos\()\d+")
-		n = re.search(pat, val)
-		num = float(val[n.start():n.end()])
-		val = str(math.cos(num))
-		data.set(val)
-	if operator == "tan":
-		pat = re.compile(r"(?<=tan\()\d+")
-		n = re.search(pat, val)
-		num = float(val[n.start():n.end()])
-		val = str(math.tan(num))
-		data.set(val)
-	if operator == "log":
-		pat = re.compile(r"(?<=log\()\d+")
-		n = re.search(pat, val)
-		num = float(val[n.start():n.end()])
-		val = str(math.log(num))
-		data.set(val)
-def S_sin():
-	global A
-	global operator
+def S_fact():
 	global val
 
-	operator = "sin"
-	val += "sin("
+	val += "!"
+	data.set(val)
+
+def S_sin():
+	global operators
+	global val
+
+	if val != "" and val[-1] not in operators:
+		val += "*"
+
+	val += " sin("
 	
 	data.set(val)
+
+
+
 def S_cos():
-	global A
-	global operator
+	global operators
 	global val
 
-
-	operator = "cos"
-	val += "cos("
+	if val != "" and val[-1] not in operators:
+		val += "*"
+	val += " cos("
 	data.set(val)
 
 def S_tan():
-	global A
-	global operator
+	global operators
 	global val
 
-	operator = "tan"
-	val += "tan("
+	if val != "" and val[-1] not in operators:
+		val += "*"
+	val += " tan("
 
 	data.set(val)
 
 def S_log():
-	global A
-	global operator
+	global operators
 	global val
 
+	if val != "" and val[-1] not in operators:
+		val += "*"
 	
-	operator = "log"
-	val += "log("
+	val += " log("
+	data.set(val)
+
+def S_pi():
+	global operators
+	global val
+
+	if val != "" and val[-1] not in operators:
+		val += "*"
+	val += "π"
 	data.set(val)
 
 	
 root= tk.Tk()
-root.geometry("400x600+25+25")
+root.geometry("400x600+800+25")
 root.resizable(0,0)
 root.title("Calculator")
 data = StringVar()
@@ -318,9 +275,9 @@ def scie():
 		btnCos.pack(side = LEFT,expand=True,)
 		btnTan=Button(btnrowS1,text="tan",font=("Verdana",12),border=0.5,relief=GROOVE, command = S_tan)
 		btnTan.pack(side = LEFT,expand=True,)
-		btnPi=Button(btnrowS1,text="π",font=("Arial",12),border=0.5,relief=GROOVE)
+		btnPi=Button(btnrowS1,text="π",font=("Arial",12),border=0.5,relief=GROOVE, command = S_pi)
 		btnPi.pack(side = LEFT,expand=True,)
-		btnFact=Button(btnrowS1,text="n!",font=("Verdana",12),border=0.5,relief=GROOVE)
+		btnFact=Button(btnrowS1,text="n!",font=("Verdana",12),border=0.5,relief=GROOVE, command = S_fact)
 		btnFact.pack(side = LEFT,expand=True,)
 		btnLog=Button(btnrowS1,text="log",font=("Verdana",12),border=0.5,relief=GROOVE, command = S_log)
 		btnLog.pack(side = LEFT,expand=True,)
@@ -354,11 +311,11 @@ btnrow4.pack(expand=True , fill ="both",)
 
 btnrowS1 = Frame()
 
-btnAC=Button(btnrow00,text="AC",font=("Verdana",22),border=0,relief=GROOVE,command= pressed_C)
-btnAC.pack(side = LEFT,expand=True,fill="both",)
-btnB=Button(btnrow00,text="<--",font=("Verdana",22),border=0,relief=GROOVE,command= pressed_btnB)
-btnB.pack(side = LEFT,expand=True,fill="both",)
-btnMod=Button(btnrow00,text="%",font=("Verdana",22),border=0,relief=GROOVE,command= pressed_btn1)
+btnLB=Button(btnrow00,text="(",font=("Verdana",22),border=0,relief=GROOVE,command= pressed_LB)
+btnLB.pack(side = LEFT,expand=True,fill="both",)
+btnRB=Button(btnrow00,text=")",font=("Verdana",22),border=0,relief=GROOVE,command= pressed_RB)
+btnRB.pack(side = LEFT,expand=True,fill="both",)
+btnMod=Button(btnrow00,text="%",font=("Verdana",22),border=0,relief=GROOVE,command= pressed_percent)
 btnMod.pack(side = LEFT,expand=True,fill="both",)
 btnDiv=Button(btnrow00,text="/",font=("Verdana",22),border=0,relief=GROOVE,command= pressed_Div)
 btnDiv.pack(side = LEFT,expand=True,fill="both",)
@@ -400,8 +357,8 @@ btn_dot=Button(btnrow4,text=".",font=("Verdana",22),border=0,relief=GROOVE,comma
 btn_dot.pack(side = LEFT,expand=True,fill="both",)
 btn0=Button(btnrow4,text="0",font=("Verdana",22),border=0,relief=GROOVE,command= pressed_btn0)
 btn0.pack(side = LEFT,expand=True,fill="both",)
-btn_bracket=Button(btnrow4,text="()",font=("Verdana",22),border=0,relief=GROOVE,command= pressed_bracket)
-btn_bracket.pack(side = LEFT,expand=True,fill="both",)
+btn_AC=Button(btnrow4,text="AC",font=("Verdana",22),border=0,relief=GROOVE,command= pressed_C)
+btn_AC.pack(side = LEFT,expand=True,fill="both",)
 btnEq=Button(btnrow4,text="=",font=("Verdana",22),border=0,fg = "sea green" ,relief=GROOVE,command= result)
 btnEq.pack(side = LEFT,expand=True,fill="both",)
 
