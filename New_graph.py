@@ -1,0 +1,195 @@
+import tkinter as tk
+import sys
+from drawGraph import *
+
+def display_graph():
+    root1 = tk.Tk()
+
+    root1.geometry("331x238+650+150")
+    root1.minsize(120, 1)
+    root1.maxsize(1370, 749)
+    root1.resizable(1,  1)
+    root1.title("Graphs")
+    root1.configure(background="#d9d9d9")
+    root1.configure(highlightbackground="#d9d9d9")
+    root1.configure(highlightcolor="black")
+
+
+    x_start = tk.Entry(root1)
+    x_start.place(relx=0.103, rely=0.164, height=20, relwidth=0.193)
+    x_start.configure(background="white")
+    x_start.configure(disabledforeground="#a3a3a3")
+    x_start.configure(font="TkFixedFont")
+    x_start.configure(foreground="#000000")
+    x_start.configure(highlightbackground="#d9d9d9")
+    x_start.configure(highlightcolor="black")
+    x_start.configure(insertbackground="black")
+    x_start.configure(selectbackground="blue")
+    x_start.configure(selectforeground="white")
+
+    x_end = tk.Entry(root1)
+    x_end.place(relx=0.411, rely=0.164, height=20, relwidth=0.193)
+    x_end.configure(background="white")
+    x_end.configure(disabledforeground="#a3a3a3")
+    x_end.configure(font="TkFixedFont")
+    x_end.configure(foreground="#000000")
+    x_end.configure(highlightbackground="#d9d9d9")
+    x_end.configure(highlightcolor="black")
+    x_end.configure(insertbackground="black")
+    x_end.configure(selectbackground="blue")
+    x_end.configure(selectforeground="white")
+
+    x_step = tk.Entry(root1)
+    x_step.place(relx=0.719, rely=0.164, height=20, relwidth=0.193)
+    x_step.configure(background="white")
+    x_step.configure(disabledforeground="#a3a3a3")
+    x_step.configure(font="TkFixedFont")
+    x_step.configure(foreground="#000000")
+    x_step.configure(highlightbackground="#d9d9d9")
+    x_step.configure(highlightcolor="black")
+    x_step.configure(insertbackground="black")
+    x_step.configure(selectbackground="blue")
+    x_step.configure(selectforeground="white")
+
+    Label1 = tk.Label(root1)
+    Label1.place(relx=0.103, rely=0.084, height=10, width=53)
+    Label1.configure(activebackground="#f9f9f9")
+    Label1.configure(activeforeground="black")
+    Label1.configure(background="#d9d9d9")
+    Label1.configure(disabledforeground="#a3a3a3")
+    Label1.configure(foreground="#000000")
+    Label1.configure(highlightbackground="#d9d9d9")
+    Label1.configure(highlightcolor="black")
+    Label1.configure(text='''x (Start)''')
+
+    Label1_6 = tk.Label(root1)
+    Label1_6.place(relx=0.411, rely=0.084, height=10, width=53)
+    Label1_6.configure(activebackground="#f9f9f9")
+    Label1_6.configure(activeforeground="black")
+    Label1_6.configure(background="#d9d9d9")
+    Label1_6.configure(disabledforeground="#a3a3a3")
+    Label1_6.configure(foreground="#000000")
+    Label1_6.configure(highlightbackground="#d9d9d9")
+    Label1_6.configure(highlightcolor="black")
+    Label1_6.configure(text='''x (End)''')
+
+    Label1_7 = tk.Label(root1)
+    Label1_7.place(relx=0.686, rely=0.084, height=10, width=53)
+    Label1_7.configure(activebackground="#f9f9f9")
+    Label1_7.configure(activeforeground="black")
+    Label1_7.configure(background="#d9d9d9")
+    Label1_7.configure(disabledforeground="#a3a3a3")
+    Label1_7.configure(foreground="#000000")
+    Label1_7.configure(highlightbackground="#d9d9d9")
+    Label1_7.configure(highlightcolor="black")
+    Label1_7.configure(text='''Steps''')
+
+    Label2 = tk.Label(root1)
+    Label2.place(relx=0.091, rely=0.378, height=20, width=107)
+    Label2.configure(activebackground="#f9f9f9")
+    Label2.configure(activeforeground="black")
+    Label2.configure(background="#d9d9d9")
+    Label2.configure(disabledforeground="#a3a3a3")
+    Label2.configure(foreground="#000000")
+    Label2.configure(highlightbackground="#d9d9d9")
+    Label2.configure(highlightcolor="black")
+    Label2.configure(text='''Y (Function of x)''')
+
+    y_fun = tk.Entry(root1)
+    y_fun.place(relx=0.1, rely=0.492, height=30, relwidth=0.798)
+    y_fun.configure(background="white")
+    y_fun.configure(disabledforeground="#a3a3a3")
+    y_fun.configure(font="TkFixedFont")
+    y_fun.configure(foreground="#000000")
+    y_fun.configure(highlightbackground="#d9d9d9")
+    y_fun.configure(highlightcolor="black")
+    y_fun.configure(insertbackground="black")
+    y_fun.configure(selectbackground="blue")
+    y_fun.configure(selectforeground="white")
+
+
+    var_x = tk.IntVar()
+    var_y = tk.IntVar()
+    var_xy = tk.IntVar()
+
+    X_axis = tk.Checkbutton(root1)
+    X_axis.place(relx=0.121, rely=0.63, relheight=0.147, relwidth=0.215)
+    X_axis.configure(activebackground="#ececec")
+    X_axis.configure(activeforeground="#000000")
+    X_axis.configure(background="#d9d9d9")
+    X_axis.configure(disabledforeground="#a3a3a3")
+    X_axis.configure(foreground="#000000")
+    X_axis.configure(highlightbackground="#d9d9d9")
+    X_axis.configure(highlightcolor="black")
+    X_axis.configure(justify='left')
+    X_axis.configure(text='''x-axis''')
+    X_axis.configure(variable= var_x)
+
+    Y_axis = tk.Checkbutton(root1)
+    Y_axis.place(relx=0.393, rely=0.63, relheight=0.147, relwidth=0.215)
+    Y_axis.configure(activebackground="#ececec")
+    Y_axis.configure(activeforeground="#000000")
+    Y_axis.configure(background="#d9d9d9")
+    Y_axis.configure(disabledforeground="#a3a3a3")
+    Y_axis.configure(foreground="#000000")
+    Y_axis.configure(highlightbackground="#d9d9d9")
+    Y_axis.configure(highlightcolor="black")
+    Y_axis.configure(justify='left')
+    Y_axis.configure(text='''y-axis''')
+    Y_axis.configure(variable= var_y)
+
+    axes_centre = tk.Checkbutton(root1)
+    axes_centre.place(relx=0.665, rely=0.63, relheight=0.147, relwidth=0.215)
+    axes_centre.configure(activebackground="#ececec")
+    axes_centre.configure(activeforeground="#000000")
+    axes_centre.configure(background="#d9d9d9")
+    axes_centre.configure(disabledforeground="#a3a3a3")
+    axes_centre.configure(foreground="#000000")
+    axes_centre.configure(highlightbackground="#d9d9d9")
+    axes_centre.configure(highlightcolor="black")
+    axes_centre.configure(justify='left')
+    axes_centre.configure(text='''Centre''')
+    axes_centre.configure(variable = var_xy)
+
+
+
+    def butt():
+        global xs
+        global xe
+        global xst
+        global y
+        global v_x
+        global v_y
+        global xy_centre
+
+        xs = x_start.get()
+        xe = x_end.get()
+        xst = x_step.get()
+        v_x = var_x.get()
+        v_y = var_y.get()
+        xy_centre = var_xy.get()
+        y = y_fun.get()
+
+        print(xs, xe, xst,y,v_x, v_y, xy_centre, sep = "\n")
+        draw(xs, xe, xst, y, v_x , v_y, xy_centre)
+
+    gen_graph = tk.Button(root1)
+    gen_graph.place(relx=0.242, rely=0.798, height=34, width=157)
+    gen_graph.configure(activebackground="#ececec")
+    gen_graph.configure(activeforeground="#000000")
+    gen_graph.configure(background="#d9d9d9")
+    gen_graph.configure(disabledforeground="#a3a3a3")
+    gen_graph.configure(foreground="#000000")
+    gen_graph.configure(highlightbackground="#d9d9d9")
+    gen_graph.configure(highlightcolor="black")
+    gen_graph.configure(pady="0")
+    gen_graph.configure(text='''Generate Graph''')
+    gen_graph.configure(command = butt)
+
+
+    menubar = tk.Menu(root1,font="TkMenuFont",bg='#d9d9d9',fg='#000000')
+    root1.configure(menu = menubar)
+
+    root1.mainloop()
+
+# show_graph_sec()

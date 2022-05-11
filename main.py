@@ -1,14 +1,17 @@
-# Main Objective: Word Wrap, API, Added Dark Mode
+# Main Objective: Added graph feature
 
 import tkinter as tk
 import scipy as sp
 import scipy as sp
 import numpy as np
+import matplotlib.pylab as plt
 import wolframalpha
+from New_graph import *
 from tkinter import *
 from tkinter import messagebox
 from voiceInput import *
 from textAnalyzer import *
+from menubar import *
 import math
 import re
 wolfram_id = "P6QTR6-V472P88E8G"
@@ -155,6 +158,8 @@ def pressed_percent():
 	val = val + "%"
 	smart_size(val)
 
+def pressed_btnG():
+	display_graph()
 	
 
 def pressed_btnB():
@@ -339,6 +344,7 @@ def lightmode():
 
 	btnrow0.configure(bg = back)
 	btnS.configure(bg = "#000055")
+	btnG.configure(bg = "#000055")
 	btnT.configure(bg = "#000055")
 	btnV.configure(bg = "#000055")
 
@@ -370,6 +376,7 @@ def lightmode():
 	
 def darkmode():
 	global mode
+	global btnSubmit
 	mode = 1
 	front = "white"
 	back = "#242424"
@@ -385,6 +392,7 @@ def darkmode():
 	btnrow0.configure(bg = back)
 	btnS.configure(bg = "green")
 	btnT.configure(bg = "green")
+	btnG.configure(bg = "green")
 	btnV.configure(bg = "green")
 
 
@@ -595,6 +603,8 @@ btnV.pack(side = LEFT,expand=True,)
 btnT=Button(btnrow0,text="Type",font=("Verdana",12),border=0,fg = "white" ,bg = "#000055",relief=GROOVE, command = query_type)
 btnT.pack(side = LEFT,expand=True,)
 
+btnG=Button(btnrow0,text="Graph",font=("Verdana",12),border=0,fg = "white" ,bg = "#000055",relief=GROOVE, command = pressed_btnG)
+btnG.pack(side = LEFT,expand=True,)
 
 btnB=Button(btnrow0,text="<--",font=("Verdana",12),border=0,fg = "white" ,bg = "dark red",relief=GROOVE,command = pressed_btnB)
 btnB.pack(side = LEFT,expand=True,)
@@ -667,7 +677,6 @@ btn_AC=Button(btnrow4,text="AC",font=("Verdana",22),border=0,relief=GROOVE,comma
 btn_AC.pack(side = LEFT,expand=True,fill="both",)
 btnEq=Button(btnrow4,text="=",font=("Verdana",22),border=0,fg = "sea green" ,relief=GROOVE,command= result)
 btnEq.pack(side = LEFT,expand=True,fill="both",)
-
 
 
 root.mainloop()
